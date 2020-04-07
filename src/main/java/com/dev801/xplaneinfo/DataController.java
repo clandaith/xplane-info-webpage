@@ -24,13 +24,13 @@ public class DataController {
 		Map<Integer, List<Float>> blork = UDPListener.blork;
 		Data data = new Data();
 
-		data.setTransponder(blork != null && blork.containsKey(104) ? blork.get(104).get(1).toString() : "none");
-		data.setRpm(blork != null && blork.containsKey(37) ? blork.get(37).get(0).toString() : "0");
+		data.setTransponder(blork != null && blork.containsKey(104) ? "" + blork.get(104).get(1).intValue() : "none");
+		data.setRpm(blork != null && blork.containsKey(37) ? "" + blork.get(37).get(0).intValue() : "0");
 		data.setLatitude(blork != null && blork.containsKey(20) ? blork.get(20).get(0).toString() : "0");
 		data.setLongitude(blork != null && blork.containsKey(20) ? blork.get(20).get(1).toString() : "0");
-		data.setSpeed(blork != null && blork.containsKey(3) ? blork.get(3).get(0).toString() : "0");
-		data.setAltitude(blork != null && blork.containsKey(20) ? blork.get(20).get(5).toString() : "0");
-		data.setCompass(blork != null && blork.containsKey(19) ? blork.get(19).get(0).toString() : "0");
+		data.setSpeed(blork != null && blork.containsKey(3) ? "" + blork.get(3).get(0).intValue() : "0");
+		data.setAltitude(blork != null && blork.containsKey(20) ? "" + blork.get(20).get(5).intValue() : "0");
+		data.setCompass(blork != null && blork.containsKey(19) ? "" + blork.get(19).get(0).intValue() : "0");
 
 		return data;
 	}

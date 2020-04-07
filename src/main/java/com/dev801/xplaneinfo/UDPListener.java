@@ -40,7 +40,7 @@ public class UDPListener extends Thread {
 			while (keepRunning) {
 				ds.receive(p);
 
-				LOGGER.info("Got data.  Received: {} bytes: ", p.getLength());
+				// LOGGER.info("Got data. Received: {} bytes: ", p.getLength());
 
 				examine(p.getData(), p.getLength());
 			}
@@ -55,7 +55,7 @@ public class UDPListener extends Thread {
 		for (int x = 5; x <= plen - 1; x += messageLength) {
 			blork.putAll(blah(Arrays.copyOfRange(pbuf, x, x + messageLength)));
 
-			LOGGER.info("\n\n");
+			// LOGGER.info("\n\n");
 		}
 	}
 
@@ -66,14 +66,14 @@ public class UDPListener extends Thread {
 		x = 0;
 		byte[] bytex = new byte[] { pbuf[x], pbuf[++x], pbuf[++x], pbuf[++x] };
 		int type = ByteBuffer.wrap(bytex).order(ByteOrder.LITTLE_ENDIAN).getInt();
-		LOGGER.info("type = {}", type);
+		// LOGGER.info("type = {}", type);
 
 		int q = x + 1;
-		int counter1 = 0;
+		// int counter1 = 0;
 		for (int i = q; i < messageLength; i += 4) {
 			byte[] bytes = new byte[] { pbuf[i], pbuf[i + 1], pbuf[i + 2], pbuf[i + 3] };
 			float f = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getFloat();
-			LOGGER.info("f{} = {}", counter1++, String.format("%.6f ", f));
+			// LOGGER.info("f{} = {}", counter1++, String.format("%.6f ", f));
 			dataList.add(f);
 		}
 
