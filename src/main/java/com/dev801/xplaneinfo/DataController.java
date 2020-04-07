@@ -16,20 +16,7 @@ public class DataController {
 	@GetMapping("/data/hello")
 	public String index() {
 		LOGGER.info("Where in DataController");
-
 		return "hello";
-	}
-
-	@GetMapping("/data/transponder")
-	public Holder transponder() {
-		return new Holder();
-	}
-
-	@GetMapping("/data/latitude")
-	public String latitude() {
-		return UDPListener.blork != null && UDPListener.blork.containsKey(20)
-				? UDPListener.blork.get(20).get(0).toString()
-				: "0";
 	}
 
 	@GetMapping("/data/info")
