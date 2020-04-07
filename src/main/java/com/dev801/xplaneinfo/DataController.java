@@ -1,5 +1,8 @@
 package com.dev801.xplaneinfo;
 
+import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +22,7 @@ public class DataController {
 
 	@GetMapping("/data/transponder")
 	public Holder transponder() {
-		return new Holder(); // UDPListener.blork != null && UDPListener.blork.containsKey(104) ?
-								// UDPListener.blork.get(104).get(1) : 0f;
+		return new Holder();
 	}
 
 	@GetMapping("/data/latitude")
@@ -30,4 +32,19 @@ public class DataController {
 				: "0";
 	}
 
+	@GetMapping("/data/info")
+	public Data getInfo() {
+		Map<Integer, List<Float>> blork = UDPListener.blork;
+		Data data = new Data();
+
+		data.setTransponder(blork != null && blork.containsKey(104) ? blork.get(104).get(1).toString() : "none");
+		data.setRpm(blork != null && blork.containsKey(37) ? blork.get(37).get(0).toString() : "0");
+		data.setLatitude(blork != null && blork.containsKey(20) ? blork.get(20).get(0).toString() : "0");
+		data.setLongitude(blork != null && blork.containsKey(20) ? blork.get(20).get(1).toString() : "0");
+		data.setSpeed(blork != null && blork.containsKey(3) ? blork.get(3).get(0).toString() : "0");
+		data.setAltitude(blork != null && blork.containsKey(20) ? blork.get(20).get(5).toString() : "0");
+		data.setCompass(blork != null && blork.containsKey(19) ? blork.get(19).get(0).toString() : "0");
+
+		return data;
+	}
 }
