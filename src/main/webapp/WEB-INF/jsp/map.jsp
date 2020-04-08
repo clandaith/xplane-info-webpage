@@ -21,22 +21,21 @@
       	width: 100%;
       }
       th, td {
-  			padding: 15px;
       	text-align: center;
       }
     </style>
 
 </head>
 <body>
-    <h2 class="hello-title">Hello <div id="transponder">0</div></h2>
+    <h2 class="hello-title">Hello <span id="transponder">0</span></h2>
   
 
 <table>
 	<tr>
-			<th>RPM: <div id="rpm">0</div></th>
-			<th>Speed: <div id="speed">0</div></th>
-			<th>Altitude: <div id="altitude">0</div></th>
-			<th>Compass: <div id="compass">0</div></th>
+			<th>RPM: <span id="rpm">0</span></th>
+			<th>Speed: <span id="speed">0</span></th>
+			<th>Altitude: <span id="altitude">0</span></th>
+			<th>Compass: <span id="compass">0</span></th>
 	</tr>
 <tr>
 	<td><canvas id="canvasRPM" width="150" height="150" style="border:1px solid #d3d3d3;"></canvas></td>
