@@ -20,6 +20,9 @@ public class ViewController {
 
 		Map<Integer, List<Float>> blork = UDPListener.blork;
 
+		// 132 1 = climb rate
+		// 20 3 = feet abobe ground level
+
 		model.addAttribute("transponder", blork != null && blork.containsKey(104) ? blork.get(104).get(1) : "none");
 
 		model.addAttribute("rpms", blork != null && blork.containsKey(37) ? blork.get(37).get(0) : "0");
