@@ -137,10 +137,7 @@ draw();
 							compassGuage();
 
 							drawCompass();
-
-
-
-drawWithInputValue(info["speed"]);
+							drawWithInputValue(info["speed"]);
 
 					  }
 					});
