@@ -35,7 +35,7 @@ function altGuage(){
 		ctx.fillRect(0, (c.height * .95), c.width, c.height);
 
 		ctx.fillStyle = "#FF0000";
-		ctx.fillRect(0, (c.height * .05), c.width, c.height);
+		ctx.fillRect(0, 0, c.width, (c.height * .05));
 }
 
 function drawCompass() {
