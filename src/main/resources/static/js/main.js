@@ -19,7 +19,15 @@ function rpmGuage(){
 function altGuage(){		
 		var c = document.getElementById("canvasAlt");
 		var ctx = c.getContext("2d");
+
+		ctx.fillStyle = "#FF0000";
+		ctx.fillRect(0, (c.height * .95), c.width, c.height);
+
+		ctx.fillStyle = "#FF0000";
+		ctx.fillRect(0, 0, c.width, (c.height * .05));
 		
+//+++++++++++++
+
 		var altPercent = altitude / topAlt;
 		var lineAlt = altPercent * c.height;
 		lineAlt = c.height - lineAlt;
@@ -29,13 +37,6 @@ function altGuage(){
 		ctx.moveTo(0, lineAlt);
 		ctx.lineTo( c.width, lineAlt);
 		ctx.stroke();
-
-
-		ctx.fillStyle = "#FF0000";
-		ctx.fillRect(0, (c.height * .95), c.width, c.height);
-
-		ctx.fillStyle = "#FF0000";
-		ctx.fillRect(0, 0, c.width, (c.height * .05));
 }
 
 function drawCompass() {

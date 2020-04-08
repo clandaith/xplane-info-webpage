@@ -40,8 +40,9 @@ public class UDPListener extends Thread {
 			while (keepRunning) {
 				ds.receive(p);
 
-				// LOGGER.info("Got data. Received: {} bytes: ", p.getLength());
+				LOGGER.debug("Got data. Received: {} bytes: ", p.getLength());
 
+				blork = new HashMap();
 				examine(p.getData(), p.getLength());
 			}
 		} catch (Exception e) {
@@ -53,29 +54,36 @@ public class UDPListener extends Thread {
 
 	private void examine(byte[] pbuf, int plen) {
 		for (int x = 5; x <= plen - 1; x += messageLength) {
-			blork.putAll(blah(Arrays.copyOfRange(pbuf, x, x + messageLength)));
+			blork.putAll(parseData(Arrays.copyOfRange(pbuf, x, x + messageLength)));
 
-			// LOGGER.info("\n\n");
+			LOGGER.debug("\n\n");
 		}
 	}
 
-	private Map<Integer, List<Float>> blah(byte[] pbuf) {
+	private Map<Integer, List<Float>> parseData(byte[] pbuf) {
 		List<Float> dataList = Lists.newArrayList();
+
+		StringBuilder sb = new StringBuilder();
 
 		int x = 0;
 		x = 0;
 		byte[] bytex = new byte[] { pbuf[x], pbuf[++x], pbuf[++x], pbuf[++x] };
 		int type = ByteBuffer.wrap(bytex).order(ByteOrder.LITTLE_ENDIAN).getInt();
-		// LOGGER.info("type = {}", type);
+		LOGGER.debug("type = {}", type);
+		sb.append("type = " + type + " \t ");
 
 		int q = x + 1;
-		// int counter1 = 0;
+		int counter1 = 0;
 		for (int i = q; i < messageLength; i += 4) {
 			byte[] bytes = new byte[] { pbuf[i], pbuf[i + 1], pbuf[i + 2], pbuf[i + 3] };
 			float f = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getFloat();
-			// LOGGER.info("f{} = {}", counter1++, String.format("%.6f ", f));
+			// LOGGER.debug("f{} = {}", counter1++, String.format("%.6f ", f));
 			dataList.add(f);
+			sb.append("f" + counter1++ + " = ");
+			sb.append(String.format("%.6f ", f) + " :: ");
 		}
+
+		LOGGER.info(sb.toString());
 
 		Map<Integer, List<Float>> m = Maps.newHashMap();
 		m.put(type, dataList);
