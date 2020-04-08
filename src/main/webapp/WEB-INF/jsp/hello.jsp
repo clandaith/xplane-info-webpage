@@ -3,78 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <title>XPlane Info</title>
+
     <link href="/css/main.css" rel="stylesheet">
+		<link href="/css/leaflet.css" rel="stylesheet">
+
     <script src="/js/main.js"></script>
-     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="/js/leaflet-src.js" ></script>
+		<script src="/js/leaflet.rotatedMarker.js" ></script>
 
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     <style>
        /* Set the size of the div element that contains the map */
-      #map {
-        height: 300px;  /* The height is 400 pixels */
-        width: 100%;  /* The width is the width of the web page */
-       }
+      #mapid { height: 600px; }
+      table {
+      	width: 100%;
+      }
+      th, td {
+  			padding: 15px;
+      	text-align: center;
+      }
     </style>
 
 </head>
 <body>
     <h2 class="hello-title">Hello <span id="transponder">0</span></h2>
-    <p>
-    	RPM: <span id="rpms">0</span><br>
-    	Lat: <span id="latitude">0</span><br>
-    	Long: <span id="longitude">0</span><br>
-    	Speed: <span id="speed">0</span><br>
-    	Altitude: <span id="altitude">0</span><br>
-    	Compass: <span id="compass">0</span><br>
-    </p>
+  
 
+<table>
+	<tr>
+			<th>RPM: <span id="rpm">0</span></th>
+			<th>Speed: <span id="speed">0</span></th>
+			<th>Altitude: <span id="altitude">0</span></th>
+			<th>Compass: <span id="compass">0</span></th>
+	</tr>
+<tr>
+	<td><canvas id="canvasRPM" width="150" height="150" style="border:1px solid #d3d3d3;"></canvas></td>
+	<td><canvas id="canvasSpeed" width="150" height="150" style="border:1px solid #d3d3d3;"></canvas></td>
+	<td><canvas id="canvasAlt" width="150" height="150" style="border:1px solid #d3d3d3;"></canvas></td>
+	<td><canvas id="canvasComp" width="150" height="150" style="border:1px solid #d3d3d3;"></canvas></td>
+</tr>
+
+<!--
+
+	<tr>
+			<th>Lat:</th>
+			<th>Long:</th>
+	</tr>
+<tr>
+	<td><span id="latitude">0</span></td>
+	<td><span id="longitude">0</span></td>
+</tr>
+
+-->
+
+</table>
 
 <p>
-    <div id="map"></div>
+    <div id="mapid"></div>
 </p>
 
 <script type="text/javascript">
 
-		var marker;
-		var map;
+		var lat = 0;
+		var longt = 0;
+		var transp = 0;
+		var altitude = 0;
+		var rpm = 0;
+		var compass = 0;
 
-		var lat;
-		var longt;
-		var transp;
-		var infowindow;
+		var topAlt = 20000;
 
-		var icon = {path: "M 3.44105426,177.573221 L132.618495,104.481306 C132.618495,82.359187 132.618495,61.1411336 132.618495,40.8271456 C132.618495,24.141874 141.694936,11.8547749 150.238685,11.8547749 C158.782435,11.8547749 167.306716,25.1349875 167.306716,40.8271456 C167.306716,61.4541775 167.306716,82.672231 167.306716,104.481306 L297.036317,177.573221 L297.036317,205.38198 L167.306716,169.214028 L167.306716,219.768622 L166.144498,236.262393 L208.254757,274.744564 L208.254757,291.021145 L158.340873,280.628348 C155.681103,287.556879 152.980374,291.021145 150.238685,291.021145 C147.496997,291.021145 144.736021,287.556879 141.955758,280.628348 L92.1914103,291.021145 L92.1914103,274.744564 L133.932991,236.262393 L132.618495,219.768622 L132.618495,169.214028 L3.44105426,205.38198 L3.44105426,177.573221 Z",
-		    fillColor: 'black',
-		    fillOpacity: 0.8,
-		    scale: .1};
+		var img = null, needle = null, degrees = 0;
 
-				// Initialize and add the map
-				function initMap() {
-				  // The location of Uluru
-				  var uluru = {lat: -25.344, lng: 131.036};
-				  // The map, centered at Uluru
+	var mymap = L.map('mapid').setView([lat, longt], 13);
 
-				   map = new google.maps.Map(
-				      document.getElementById('map'), {zoom: 4, center: uluru});
-				  // The marker, positioned at Uluru
-				   marker = new google.maps.Marker({position: uluru, map: map, icon: icon});
+	var iconAirplane = L.icon({
+    iconUrl: 'airplane.svg', iconSize: [30, 30], iconAnchor: [15, 15]
+});
 
-		        marker.addListener('click', function() {
-		          infowindow.open(map, marker);
-		        });
-				};
+	var iconDot = L.icon({
+    iconUrl: 'dot.png', iconSize: [2, 2], iconAnchor: [1, 1]
+});
+
+	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+	    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+	    maxZoom: 18,
+	    id: 'mapbox/streets-v11',
+	    tileSize: 512,
+	    zoomOffset: -1,
+	    accessToken: 'pk.eyJ1IjoiY2xhbmRhaXRoIiwiYSI6ImNrOHFpc3Y1dTAzZXAzaXAxNGdrN284cDIifQ.OMlOIwRO0eA58Xf-7GS9Fg'
+	}).addTo(mymap);
+
+var layerGroup = L.layerGroup().addTo(mymap);
+var layerPath = L.layerGroup().addTo(mymap);
 
 
-			  function moveMarker( lat, longt, compass ) {
-			  	marker.setIcon(icon);
-					marker.setPosition( new google.maps.LatLng( lat, longt ) );
 
-					infowindow = new google.maps.InfoWindow({content: transp + " " + lat + " " + longt});
-
-			    map.panTo( new google.maps.LatLng( lat, longt ) );
-				};
-
+		
 			$(document).ready(function(){
 
 			  setInterval(function () {
@@ -83,28 +109,130 @@
 					  dataType: "json",
 					  success: function( info ) {
 					    $( "#transponder" ).html(info["transponder"] );
-					    $( "#rpms" ).html(info["rpm"] );
-					    $( "#latitude" ).html(info["latitude"] );
-					    $( "#longitude" ).html(info["longitude"] );
+					    $( "#rpm" ).html(info["rpm"] );
+					    //$( "#latitude" ).html(info["latitude"] );
+					    //$( "#longitude" ).html(info["longitude"] );
 					    $( "#speed" ).html(info["speed"] );
 					    $( "#altitude" ).html(info["altitude"] );
 					    $( "#compass" ).html(info["compass"] );
 
-transp = info["transponder"];
-lat = info["latitude"];
-longt = info["longitude"];
+							transp = info["transponder"];
+							lat = info["latitude"];
+							longt = info["longitude"];
 
-					   moveMarker(info["latitude"], info["longitude"], info["compass"]);
+							rpm = info["rpm"];
+							altitude = info["altitude"];
+							compass = info["compass"];
+
+							mymap.panTo(L.latLng(lat, longt));
+							layerGroup.clearLayers();
+
+							L.marker([lat, longt], {icon: iconAirplane, rotationAngle: info["compass"]}).addTo(layerGroup);
+							L.marker([lat, longt], {icon: iconDot}).addTo(layerPath);
+
+
+							altGuage();
+							rpmGuage();
+							compassGuage();
+
+							drawCompass();
+
 					  }
 					});
 			  }, 1000);
+
+
+	// Grab the compass element
+	var canvas = document.getElementById('canvasComp');
+
+	// Canvas supported?
+	if (canvas.getContext('2d')) {
+		ctx = canvas.getContext('2d');
+
+		// Load the needle image
+		needle = new Image();
+		needle.src = '/compass/needle.png';
+
+		// Load the compass image
+		img = new Image();
+		img.src = '/compass/compass.png';
+		img.onload = imgLoaded;
+	} else {
+		alert("Canvas not supported!");
+	}
+
+
 			});
 
-    </script>
 
-    <script async defer
-    	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUV2TuPrHmxE-CiC3jG33oYeZVJtmASlk&callback=initMap">
-    </script>
+function drawCompass() {
+	var c = document.getElementById("canvasComp");
+		var ctx = c.getContext("2d");
+	ctx.clearRect(0, 0, 200, 200);
+
+	// Draw the compass onto the canvas
+	ctx.drawImage(img, 0, 0);
+
+	// Save the current drawing state
+	ctx.save();
+
+	// Now move across and down half the 
+	ctx.translate(100, 100);
+
+	// Rotate around this point
+	ctx.rotate(compass * (Math.PI / 180));
+
+	// Draw the image back and up
+	ctx.drawImage(needle, -100, -100);
+
+	// Restore the previous drawing state
+	ctx.restore();
+}
+
+
+
+function compassGuage(){
+		var c = document.getElementById("canvasRPM");
+		var ctx = c.getContext("2d");
+		ctx.beginPath();
+		ctx.moveTo(c.width / 2, c.height / 2);
+		ctx.lineTo(70, 90);
+		ctx.stroke();
+}
+
+function rpmGuage(){
+		var c = document.getElementById("canvasRPM");
+		var ctx = c.getContext("2d");
+		ctx.beginPath();
+		ctx.moveTo(75, 150);
+		ctx.lineTo(70, 90);
+		ctx.stroke();
+}
+
+function altGuage(){		
+		var c = document.getElementById("canvasAlt");
+		var ctx = c.getContext("2d");
+		
+		var altPercent = altitude / topAlt;
+		var lineAlt = altPercent * c.height;
+		lineAlt = c.height - lineAlt;
+
+		ctx.clearRect(0, 0, c.width, c.height);
+		ctx.beginPath();
+		ctx.moveTo(0, lineAlt);
+		ctx.lineTo( c.width, lineAlt);
+		ctx.stroke();
+
+
+		ctx.fillStyle = "#FF0000";
+		ctx.fillRect(0, (c.height * .95), c.width, c.height);
+}
+
+
+
+</script>
+
+
 
 </body>
 </html>
