@@ -33,7 +33,7 @@ public class ViewController {
 
 		model.addAttribute("compass", blork != null && blork.containsKey(19) ? blork.get(19).get(0) : "0");
 
-		return "hello";
+		return "map";
 	}
 
 	@GetMapping("/stop")
@@ -41,6 +41,6 @@ public class ViewController {
 		LOGGER.info("Shutting down UDP");
 		UDPListener.keepRunning = false;
 		LOGGER.info("UDP stopped");
-		return "hello";
+		return "map";
 	}
 }
