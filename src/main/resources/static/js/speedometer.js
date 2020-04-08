@@ -4,8 +4,8 @@
     // this function is strict...
 }());
 
-var iCurrentSpeed = 20,
-	iTargetSpeed = 20,
+var iCurrentSpeed = 0,
+	iTargetSpeed = 0,
 	bDecrement = null,
 	job = null;
 
@@ -564,7 +564,7 @@ function draw() {
 
 function drawWithInputValue(speed) {
     iTargetSpeed = speed;
-    
+
 		// Sanity checks
 		if (isNaN(iTargetSpeed)) {
 					iTargetSpeed = 0;
