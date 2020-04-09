@@ -67,6 +67,7 @@
 		var lat = 0;
 		var longt = 0;
 		var transp = 0;
+		var altAGL = 0;
 		var altitude = 0;
 		var rpm = 0;
 		var compass = 0;
@@ -122,6 +123,8 @@ draw();
 							rpm = info["rpm"];
 							altitude = info["altitude"];
 							compass = info["compass"];
+
+							altAGL = info["altAGL"];
 
 							mymap.panTo(L.latLng(lat, longt));
 							layerGroup.clearLayers();
