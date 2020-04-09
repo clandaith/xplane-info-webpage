@@ -26,6 +26,7 @@ function altGuage(){
 		var lineAlt = altPercent * c.height;
 		lineAlt = c.height - lineAlt;
 
+console.log(lineAlt);
 
 		ctx.fillStyle = "#FF0000";
 		ctx.fillRect(0, lineAlt, c.width, c.height);
