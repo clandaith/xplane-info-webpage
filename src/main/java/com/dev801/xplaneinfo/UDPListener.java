@@ -83,7 +83,7 @@ public class UDPListener extends Thread {
 			sb.append(String.format("%.6f ", f) + " :: ");
 		}
 
-		LOGGER.info(sb.toString());
+		LOGGER.debug(sb.toString());
 
 		Map<Integer, List<Float>> m = Maps.newHashMap();
 		m.put(type, dataList);
