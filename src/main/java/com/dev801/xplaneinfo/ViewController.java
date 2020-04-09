@@ -33,7 +33,7 @@ public class ViewController {
 		model.addAttribute("speed", blork != null && blork.containsKey(3) ? blork.get(3).get(0) : "0");
 
 		model.addAttribute("altitude", blork != null && blork.containsKey(20) ? blork.get(20).get(5) : "0");
-		model.addAttribute("altAGL", blork != null && blork.containsKey(20) ? blork.get(20).get(2) : "0");
+		model.addAttribute("altAGL", blork != null && blork.containsKey(20) ? blork.get(20).get(3) : "0");
 
 		model.addAttribute("compass", blork != null && blork.containsKey(19) ? blork.get(19).get(0) : "0");
 

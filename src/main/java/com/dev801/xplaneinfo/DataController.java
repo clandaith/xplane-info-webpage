@@ -20,17 +20,23 @@ public class DataController {
 	}
 
 	@GetMapping("/data/info")
-	public Data getInfo() {
+	public Data getInfo() throws Exception {
 		Map<Integer, List<Float>> blork = UDPListener.blork;
+
+		if (blork == null)
+			throw new Exception();
+
 		Data data = new Data();
 
-		data.setTransponder(blork != null && blork.containsKey(104) ? "" + blork.get(104).get(1).intValue() : "none");
-		data.setRpm(blork != null && blork.containsKey(37) ? "" + blork.get(37).get(0).intValue() : "0");
-		data.setLatitude(blork != null && blork.containsKey(20) ? blork.get(20).get(0).toString() : "0");
-		data.setLongitude(blork != null && blork.containsKey(20) ? blork.get(20).get(1).toString() : "0");
-		data.setSpeed(blork != null && blork.containsKey(3) ? "" + blork.get(3).get(0).intValue() : "0");
-		data.setAltitude(blork != null && blork.containsKey(20) ? "" + blork.get(20).get(5).intValue() : "0");
-		data.setCompass(blork != null && blork.containsKey(19) ? "" + blork.get(19).get(0).intValue() : "0");
+		data.setTransponder(blork.containsKey(104) ? "" + blork.get(104).get(1).intValue() : "none");
+		data.setRpm(blork.containsKey(37) ? "" + blork.get(37).get(0).intValue() : "0");
+		data.setLatitude(blork.containsKey(20) ? blork.get(20).get(0).toString() : "0");
+		data.setLongitude(blork.containsKey(20) ? blork.get(20).get(1).toString() : "0");
+		data.setSpeed(blork.containsKey(3) ? "" + blork.get(3).get(0).intValue() : "0");
+		data.setAltitude(blork.containsKey(20) ? "" + blork.get(20).get(5).intValue() : "0");
+		data.setCompass(blork.containsKey(19) ? "" + blork.get(19).get(0).intValue() : "0");
+
+		data.setAltAGL(blork.containsKey(20) ? "" + blork.get(20).get(3).intValue() : "0");
 
 		return data;
 	}

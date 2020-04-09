@@ -8,6 +8,15 @@ public class Data {
 	private String speed;
 	private String altitude;
 	private String compass;
+	private String altAGL;
+
+	public String getAltAGL() {
+		return altAGL;
+	}
+
+	public void setAltAGL(String altAGL) {
+		this.altAGL = altAGL;
+	}
 
 	public String getTransponder() {
 		return transponder;
