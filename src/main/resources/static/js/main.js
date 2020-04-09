@@ -22,13 +22,13 @@ function altGuage(){
 
 		ctx.clearRect(0, 0, c.width, c.height);
 
-		var altPercent = altitude / topAlt;
+		var altPercent = (altitude - altAGL) / topAlt;
 		var lineAlt = altPercent * c.height;
 		lineAlt = c.height - lineAlt;
 
 
 		ctx.fillStyle = "#FF0000";
-		ctx.fillRect(0, (c.height * .95), c.width, c.height);
+		ctx.fillRect(0, lineAlt, c.width, c.height);
 
 		//ctx.fillStyle = "#FF0000";
 		//ctx.fillRect(0, 0, c.width, (c.height * .05));
