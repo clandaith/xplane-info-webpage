@@ -26,17 +26,9 @@ function altGuage(){
 		var lineAlt = altPercent * c.height;
 		lineAlt = c.height - lineAlt;
 
-console.log(altitude + " :: " + altAGL + " :: " + lineAlt);
-
-		ctx.fillStyle = "#FF0000";
+		// Ground level height
+		ctx.fillStyle = "#8B4513";
 		ctx.fillRect(0, lineAlt, c.width, c.height);
-
-		//ctx.fillStyle = "#FF0000";
-		//ctx.fillRect(0, 0, c.width, (c.height * .05));
-
-
-		//ctx.fillStyle = "#FF0000";
-		//ctx.fillRect(0, 0, c.width, (c.height * .05));
 		
 //+++++++++++++
 
