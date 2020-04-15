@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>XPlane Info</title>
+    <title>XPlane ${transponder}</title>
 
     <link href="/css/main.css" rel="stylesheet">
 		<link href="/css/leaflet.css" rel="stylesheet">
@@ -27,9 +27,6 @@
 
 </head>
 <body>
-    <h2 class="hello-title">Hello <span id="transponder">0</span></h2>
-  
-
 <table>
 	<tr>
 			<th>RPM: <span id="rpm">0</span></th>
@@ -59,7 +56,6 @@
 
 </table>
 
-<br>
     <div id="mapid"></div>
 
 <script type="text/javascript">
@@ -142,7 +138,7 @@ draw();
 
 					  }
 					});
-			  }, 1000);
+			  }, 500);
 
 
 	// Grab the compass element
